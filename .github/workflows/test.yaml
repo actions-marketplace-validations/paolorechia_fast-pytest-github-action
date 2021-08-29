@@ -1,0 +1,19 @@
+name: Python package
+
+on: [push]
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: tox test
+    steps:
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Tox Action Step
+        id: tox
+        uses: paolorechia/fast-pytest-github-action@develop
+        with:
+          pytest_args: 'sample_py'
