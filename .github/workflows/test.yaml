@@ -1,0 +1,66 @@
+name: Test Github Action
+
+on: [push]
+
+jobs:
+    passing_tests_job:
+      runs-on: ubuntu-latest
+      name: Pytest passing tests
+      steps:
+        - uses: actions/setup-python@v2
+          with:
+            python-version: '3.8'
+        - name: Checkout
+          uses: actions/checkout@v2
+        - name: Pytest Action Step
+          id: pytest
+          uses: paolorechia/fast-pytest-github-action@develop
+          with:
+            pytest_args: 'sample_py/test_success.py'
+            requirements_file: 'test_requirements.txt'
+  
+    failing_pytest_job:
+      runs-on: ubuntu-latest
+      name: Failing Pytest
+      steps:
+        - uses: actions/setup-python@v2
+          with:
+            python-version: '3.8'
+        - name: Checkout
+          uses: actions/checkout@v2
+        - name: Pytest Action Step
+          id: pytest
+          uses: paolorechia/fast-pytest-github-action@develop
+          with:
+            pytest_args: 'sample_py/test_failure.py'
+            requirements_file: 'test_requirements.txt'
+  
+    missing_arg1_job:
+      runs-on: ubuntu-latest
+      name: Pytest missing arg
+      steps:
+        - uses: actions/setup-python@v2
+          with:
+            python-version: '3.8'
+        - name: Checkout
+          uses: actions/checkout@v2
+        - name: Pytest Action Step
+          id: pytest
+          uses: paolorechia/fast-pytest-github-action@develop
+          with:
+            requirements_file: 'test_requirements.txt'
+  
+    missing_arg_2_job:
+      runs-on: ubuntu-latest
+      name: Test missing arg 2
+      steps:
+        - uses: actions/setup-python@v2
+          with:
+            python-version: '3.8'
+        - name: Checkout
+          uses: actions/checkout@v2
+        - name: Pytest Action Step
+          id: pytest
+          uses: paolorechia/fast-pytest-github-action@develop
+          with:
+            pytest_args: 'sample_py/test_failure.py'

@@ -1,0 +1,12 @@
+name: 'fast-pytest'
+description: 'Quickly executes pytest'
+inputs:
+  pytest_args:
+    description: 'Args passed to pytest, provided as string'
+    required: true
+  requirements_file:
+    description: 'Requirements file to install test dependencies'
+    required: true
+runs:
+  using: 'node12'
+  main: 'dist/index.js'

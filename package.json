@@ -1,0 +1,36 @@
+{
+  "name": "fast-pytest-github-action",
+  "version": "1.0.0",
+  "description": "Aims to execute pytest as quickly as possible",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "prepare": "ncc build index.js -o dist --source-map --license licenses.txt",
+    "test": "jest",
+    "all": "npm run lint && npm run prepare && npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paolorechia/fast-pytest-github-action"
+  },
+  "keywords": [
+    "GitHub",
+    "Actions",
+    "Pytest"
+  ],
+  "author": "Paolo Rechia",
+  "license": "MIT",
+  "bugs": {
+    "url": "git+https://github.com/paolorechia/fast-pytest-github-action"
+  },
+  "homepage": "https://github.com/actions/javascript-action/issues",
+  "dependencies": {
+    "@actions/cache": "^1.0.7",
+    "@actions/core": "^1.2.5"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.27.0",
+    "eslint": "^7.4.0",
+    "jest": "^26.6.3"
+  }
+}
