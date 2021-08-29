@@ -4,31 +4,9 @@ inputs:
   pytest_args:
     description: 'Args passed to pytest, provided as string'
     required: true
-  collect_coverage:
-    description: 'Whether to collect coverage'
-    required: false
-    default: false
-  cache_python_dependencies:
-    description: 'Whether to cache dependencies'
-    required: false
-    default: true
-  cache_requirements:
-    description: 'Whether to cache dependencies'
-    required: false
-    default: true
-outputs:
-  collected_tests:
-    description: 'The number of collected tests'
-  passed_tests:
-    description: 'The number of passed tests'
-  failed_tests:
-    description: 'The number of failed tests'
-  collected_lines:
-    description: 'The amount of lines of code under test'
-  coverage_percentage:
-    description: 'The coverage percentage'
-  coverage_missing_lines:
-    description: 'The number lines of code not covered by the tests'
+  requirements_file:
+    description: 'Requirements file to install test dependencies'
+    required: true
 runs:
   using: 'node12'
   main: 'dist/index.js'

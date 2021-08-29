@@ -12,10 +12,14 @@ const fs = __nccwpck_require__(5747);
 
 const { spawn } = __nccwpck_require__(3129);
 
+let pytest_args = undefined
 let python_path = undefined
 let requirements_file = undefined
 let hash_path = undefined
 let hash_key = undefined
+
+let has_passed_tests = false
+let has_failed_tests = false
 
 function register_proc_handlers(proc, next_step) {
 
@@ -154,7 +158,16 @@ async function run_pytest(code) {
         {
             code,
             spawn_hook: function() {
-                return spawn('python3', ['-m', 'pytest', 'sample_py'])
+                const pytest = spawn('python3', ['-m', 'pytest', pytest_args])
+                pytest.stdout.on('data', function(data) {
+                    if (data.includes('passed')) {
+                        has_passed_tests = true
+                    }
+                    if (data.includes('failed')) {
+                        has_failed_tests = true
+                    }
+                })
+                return pytest 
             },
             next_step: finish_run_pytest
         }
@@ -164,13 +177,26 @@ async function run_pytest(code) {
 
 async function finish_run_pytest(code) {
     console.log('Finish pytest...')
+
+    if (has_passed_tests && !has_failed_tests) {
+        core.setOutput('OK! Congratulations :)')
+    } else {
+        core.setFailed("Failed :(");
+    }
 }
 
 async function run() {
   try {
+    pytest_args = core.getInput('pytest_args');
+    if (!pytest_args) {
+        core.setFailed("You must provide a pytest argument with 'pytest_args'");
+    }
+    requirements_file = core.getInput('requirements_file');
+    if (!requirements_file) {
+        core.setFailed("You must provide a requirements file with 'requirements_file'");
+    }
     console.log('Start run...')
     console.log('Hashing dependencies...')
-    requirements_file = 'test_requirements.txt'
     hash_key = `fast-pytest-gh-${hash_file(requirements_file)}`
     await start(0)
   } catch (error) {
