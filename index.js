@@ -46,12 +46,12 @@ async function install_pytest(code) {
             spawn_hook: function() {
                 return spawn('python3', ['-m', 'pip', 'install', 'pytest'])
             },
-            next_step: finish_pytest
+            next_step: finish_install_pytest
         }
     )
 }
 
-async function finish_pytest(code) {
+async function finish_install_pytest(code) {
     console.log('Installed pytest.')
     await base_step({
         name: 'finish pytest',
@@ -70,13 +70,57 @@ async function get_packages(code) {
                 proc.stdout.on('data', function(data) { python_path = JSON.parse(data) } )
                 return proc
             },
-            next_step: finish_get_site_packages
+            next_step: finish_get_packages
         }
     )
 }
 
-async function finish_get_site_packages(code) {
+async function finish_get_packages(code) {
     console.log('Found pathes: ', python_path)
+    await base_step({
+        name: 'finish get site packages',
+        code,
+        next_step: install_pytest_requirements
+    })
+}
+
+async function install_pytest_requirements(code) {
+    await base_step(
+        {
+            code,
+            spawn_hook: function() {
+                return spawn('python3', ['-m', 'pip', 'install', '-r', 'test_requirements.txt'])
+            },
+            next_step: finish_install_pytest_requirements
+        }
+    )
+}
+
+async function finish_install_pytest_requirements(code) {
+    console.log('Installed pytest')
+    await base_step({
+        name: 'finish get site packages',
+        code,
+        next_step: run_pytest
+    })
+}
+
+
+async function run_pytest(code) {
+    await base_step(
+        {
+            code,
+            spawn_hook: function() {
+                return spawn('python3', ['-m', 'pytest', 'sample_py'])
+            },
+            next_step: finish_run_pytest
+        }
+    )
+}
+
+
+async function finish_run_pytest(code) {
+    console.log('Finish pytest...')
 }
 
 async function run() {
